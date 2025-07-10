@@ -1,0 +1,126 @@
+/* Style de base pour le site */
+body {
+    background-color: #e9ecef;
+    font-family: Arial, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    background-color: #00274d;
+    color: white;
+    display: flex;
+    align-items: center;
+    height: 60px;
+    padding: 0 15px;
+    position: relative; /* Important pour le positionnement du bouton de connexion */
+    z-index: 1;
+    font-family: "Times New Roman", Times, serif;
+}
+
+.sidebar {
+    background-color: #00274d;
+    width: 200px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+.sidebar a {
+    color: white;
+    padding: 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #0056b3;
+}
+
+.container-content {
+    margin-left: 200px;
+    padding: 20px;
+    margin-top: 60px; /* Ajustement pour l'alignement avec la barre de navigation */
+}
+
+/* Boîte de connexion */
+.login-form {
+    display: none;
+    position: fixed; /* Assure qu’elle apparaisse au-dessus de tout le contenu */
+    top: 70px; /* Juste en dessous de la barre de navigation */
+    right: 15px;
+    width: 300px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    z-index: 3; /* Au-dessus de tout le reste */
+}
+
+.login-form input {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Style de la liste d'offres */
+.offer-card {
+    background-color: #fdfdfd;
+    color: black;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.offer-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.offer-card h5 {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.offer-card p {
+    margin: 5px 0;
+}
+
+.offer-card .accept-btn {
+    background-color: white;
+    color: #333;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.offer-card .accept-btn:hover {
+    background-color: grey;
+}
+
+/* Fond flou */
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('image.webp'); /* Chemin de votre image */
+    background-size: cover;
+    background-position: center;
+    filter: blur(8px); /* Niveau de flou */
+    z-index: -1;
+  }
