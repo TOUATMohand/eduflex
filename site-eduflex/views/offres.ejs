@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liste des Offres d'Enseignement</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Style global */
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      font-family: Verdana, Geneva, sans-serif;
+
+      height: 100%;
+    }
+
+    /* Barre de navigation */
+    .navbar {
+      background-color: #0056b3;
+      color: white;
+
+    }
+
+    .navbar .nav-link,
+    .navbar .navbar-brand {
+      color: black !important;
+      font-family: "Times New Roman", Times, serif;
+    }
+
+    /* Conteneurs principaux */
+    .content {
+      display: flex;
+      height: calc(100vh - 56px);
+      /* Ajuste pour que la hauteur totale inclue la navbar */
+    }
+
+    /* Section des offres */
+    .offers {
+      width: 50%;
+      padding: 20px;
+      overflow-y: auto;
+      position: relative;
+
+    }
+
+    /* Style de chaque offre */
+    .offer {
+      background-color: white;
+      color: black;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      position: relative;
+    }
+
+    .offer h3 {
+      margin: 0;
+      font-size: 1.2em;
+    }
+
+    /* Section de la carte */
+    #map {
+      width: 50%;
+      height: 100%;
+    }
+
+    .heading-with-background {
+      background-color: white;
+      /* Fond blanc */
+      color: black;
+      /* Texte noir */
+      padding: 10px 20px;
+      /* Espacement interne pour plus de lisibilité */
+      border: 2px solid white;
+      /* Bordure blanche */
+      border-radius: 8px;
+      /* Bordures arrondies */
+      display: inline-block;
+      /* Limite le cadre autour du texte */
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      /* Ombre subtile pour donner du relief */
+    }
+
+
+
+
+
+    /* Style du bouton Accepter */
+    .accept-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: #ffffff;
+      background-color: #0056b3;
+      border: 1px solid black;
+      border-radius: 4px;
+      padding: 5px 15px;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .accept-btn:hover {
+      background-color: #2a71bd;
+      color: #ffffff;
+    }
+
+    .background-blur {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url('image.webp');
+      /* Chemin de l'image */
+      height: 250vh;
+
+      background-position: center;
+      filter: blur(8px);
+      /* Flou de 8 pixels */
+      z-index: -1;
+      /* Assure que l'image reste en arrière-plan */
+
+      pointer-events: none;
+      /* Permet de cliquer à travers l'image de fond */
+
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Barre de navigation en haut -->
+  <!-- Barre de navigation avec icône de connexion -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Accueil</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/offres">Consulter les Offres</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/visioprof">Visio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/espace_pedagogique_prof">Espace Pédagogique</a>
+          </li>
+        </ul>
+        <!-- Icône de connexion à droite -->
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/connexion">
+              <button class="btn btn-light ml-auto" id="loginButton">Se déconnecter</button>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenu principal : offres et carte -->
+  <div class="content">
+    <!-- Section des offres d'enseignement -->
+    <div class="offers">
+      <div class="background-blur"></div> <!-- Élément de fond séparé -->
+
+
+
+      <div class="offer">
+        <h3>Mission à Montpellier</h3>
+        <p><strong>Nombre d'heures :</strong> 20 heures</p>
+        <p><strong>Date de début :</strong> 10/11/2024</p>
+        <p><strong>Date de fin :</strong> 20/11/2024</p>
+        <p><strong>Ville :</strong> Montpellier</p>
+        <button class="accept-btn">Accepter</button>
+      </div>
+      <div class="offer">
+        <h3>Mission à Lyon</h3>
+        <p><strong>Nombre d'heures :</strong> 15 heures</p>
+        <p><strong>Date de début :</strong> 15/11/2024</p>
+        <p><strong>Date de fin :</strong> 25/11/2024</p>
+        <p><strong>Ville :</strong> Lyon</p>
+        <button class="accept-btn">Accepter</button>
+      </div>
+      <div class="offer">
+        <h3>Mission à Marseille</h3>
+        <p><strong>Nombre d'heures :</strong> 3 heures</p>
+        <p><strong>Date de début :</strong> 02/12/2024</p>
+        <p><strong>Date de fin :</strong> 06/12/2024</p>
+        <p><strong>Ville :</strong> Marseille</p>
+        <button class="accept-btn">Accepter</button>
+      </div>
+      <div class="offer">
+        <h3>Mission à Bordeaux</h3>
+        <p><strong>Nombre d'heures :</strong> 50 heures</p>
+        <p><strong>Date de début :</strong> 01/04/2025</p>
+        <p><strong>Date de fin :</strong> 07/05/2025</p>
+        <p><strong>Ville :</strong> Bordeaux</p>
+        <button class="accept-btn">Accepter</button>
+      </div>
+
+      <div class="offer">
+        <h3>Mission à Lille</h3>
+        <p><strong>Nombre d'heures :</strong> 13 heures</p>
+        <p><strong>Date de début :</strong> 11/08/2025</p>
+        <p><strong>Date de fin :</strong> 18/08/2025</p>
+        <p><strong>Ville :</strong> Lille</p>
+        <button class="accept-btn">Accepter</button>
+      </div>
+      <div class="offer">
+        <h3>Mission à Nice</h3>
+        <p><strong>Nombre d'heures :</strong> 30 heures</p>
+        <p><strong>Date de début :</strong> 5/02/2025</p>
+        <p><strong>Date de fin :</strong> 18/02/2025</p>
+        <p><strong>Ville :</strong> Nice</p>
+        <button class="accept-btn">Accepter</button>
+      </div>
+      <div class="offer">
+        <h3>Mission à Toulouse</h3>
+        <p><strong>Nombre d'heures :</strong> 2 heures</p>
+        <p><strong>Date de début :</strong> 28/05/2025</p>
+        <p><strong>Date de fin :</strong> 29/05/2025</p>
+        <p><strong>Ville :</strong> Toulouse</p>
+        <button class="accept-btn">Accepter</button>
+      </div>
+      <!-- Ajoutez 8 autres offres similaires ici -->
+    </div>
+
+    <!-- Section de la carte Google Maps -->
+    <div id="map"></div>
+  </div>
+
+  <!-- Intégration de Google Maps -->
+  <script>
+    const offers = [
+      { title: "Mission à Lyon", lat: 45.7640, lng: 4.8357 },
+      { title: "Mission à Marseille", lat: 43.2965, lng: 5.3698 },
+      { title: "Mission à Bordeaux", lat: 44.8378, lng: -0.5792 },
+      { title: "Mission à Lille", lat: 50.6292, lng: 3.0573 },
+      { title: "Mission à Toulouse", lat: 43.6047, lng: 1.4442 },
+      { title: "Mission à Nice", lat: 43.7102, lng: 7.2620 },
+      { title: "Mission à Montpellier", lat: 43.6119, lng: 3.8772 }
+    ];
+
+    function initMap() {
+      const franceCenter = { lat: 46.603354, lng: 1.888334 };
+      const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 6,
+        center: franceCenter
+      });
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const userLocation = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            new google.maps.Marker({
+              position: userLocation,
+              map: map,
+              icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+              title: "Votre position"
+            });
+
+            map.setCenter(userLocation);
+          },
+          () => {
+            alert("Géolocalisation non autorisée.");
+          }
+        );
+      } else {
+        alert("Géolocalisation non supportée par le navigateur.");
+      }
+
+      offers.forEach((offer) => {
+        new google.maps.Marker({
+          position: { lat: offer.lat, lng: offer.lng },
+          map: map,
+          title: offer.title
+        });
+      });
+    }
+  </script>
+  <script async defer
+    src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDgOz2GSk6BRSl8UQWGqnLUNSiEkZoBJZ8&callback=initMap'>
+    </script>
+
+  <script>
+    document.querySelectorAll('.accept-btn').forEach(button => {
+      button.addEventListener('click', function () {
+        this.textContent = 'Accepté';
+        this.classList.add('accepted'); // Optionnel : ajouter une classe pour modifier le style si souhaité
+        this.disabled = true; // Désactive le bouton après acceptation
+      });
+    });
+  </script>
+
+
+</body>
+
+</html>
