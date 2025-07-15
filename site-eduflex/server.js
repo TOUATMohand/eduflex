@@ -16,10 +16,13 @@ app.set('view engine', 'ejs');
 db.run(`CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   email TEXT UNIQUE,
-  password TEXT
+  password TEXT,
+  role TEXT
 )`);
 
+
 // Routes
+app.get('/home', (req, res) => res.render('home', { message: null }));
 app.get('/', (req, res) => res.render('index'));
 app.get('/register', (req, res) => res.render('register'));
 app.get('/login', (req, res) => res.render('login'));
@@ -35,30 +38,37 @@ app.get('/publier', (req, res) => { res.render('publier') });
 
 
 app.post('/register', async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, role } = req.body;
   const hashed = await bcrypt.hash(password, 10);
 
-  db.run(`INSERT INTO users(email, password) VALUES (?, ?)`, [email, hashed], err => {
+  db.run(`INSERT INTO users(email, password, role) VALUES (?, ?, ?)`, [email, hashed, role], err => {
     if (err) {
-      return res.send('Erreur lors de l\'inscription : ' + err.message);
+      return res.send("Erreur lors de l'inscription : " + err.message);
     }
-    res.redirect('/login');
+    res.render('home', { message: 'Compte créé avec succès !' });
   });
 });
 
+
 app.post('/login', (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, role } = req.body;
 
   db.get(`SELECT * FROM users WHERE email = ?`, [email], async (err, user) => {
     if (!user) return res.send("Utilisateur non trouvé");
     const valid = await bcrypt.compare(password, user.password);
-    if (valid) {
-      res.send("Connexion réussie !");
+    if (!valid) return res.send("Mot de passe incorrect");
+
+    if (user.role !== role) return res.send("Rôle incorrect");
+
+    // Redirection selon le rôle
+    if (user.role === 'professeur') {
+      return res.redirect('/espace_pedagogique_prof');
     } else {
-      res.send("Mot de passe incorrect");
+      return res.redirect('/espace_etablissement');
     }
   });
 });
+
 
 app.listen(3000, () => {
   console.log("Serveur en cours d'exécution sur http://localhost:3000");

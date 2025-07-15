@@ -1,0 +1,32 @@
+<h2>Créer un compte</h2>
+<form action="/register" method="POST">
+  <input type="email" name="email" placeholder="Email" required><br>
+  <input type="password" name="password" placeholder="Mot de passe" required><br>
+  <select name="role" required>
+    <option value="">Choisir un rôle</option>
+    <option value="professeur">Professeur</option>
+    <option value="etablissement">Établissement</option>
+  </select><br>
+  <button type="submit">S'inscrire</button>
+</form>
+
+<h2>Connexion</h2>
+<form action="/login" method="POST">
+  <input type="email" name="email" placeholder="Email" required><br>
+  <input type="password" name="password" placeholder="Mot de passe" required><br>
+  <select name="role" required>
+    <option value="">Choisir un rôle</option>
+    <option value="professeur">Professeur</option>
+    <option value="etablissement">Établissement</option>
+  </select><br>
+  <button type="submit">Se connecter</button>
+</form>
+
+<!-- Toastr pour les notifications -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script>
+  if (typeof message !== 'undefined') {
+    toastr.success("<%= message %>");
+  }
+</script>
