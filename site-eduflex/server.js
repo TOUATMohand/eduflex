@@ -35,8 +35,11 @@ app.get('/', (req, res) => res.render('index'));
 app.get('/register', (req, res) => res.render('register'));
 app.get('/login', (req, res) => res.render('login'));
 app.get('/offres', (req, res) => { res.render('offres') });
-app.get('/connexion', (req, res) => { res.render('connexion') });
+app.get('/connexion', (req, res) => {
+  res.render('connexion', { message: null });
+});
 app.get('/espace_etablissement', (req, res) => { res.render('espace_etablissement') });
+app.get('/espace_professeur', (req, res) => { res.render('espace_professeur') });
 app.get('/espace_pedagogique', (req, res) => { res.render('espace_pedagogique') });
 app.get('/espace_pedagogique_prof', (req, res) => { res.render('espace_pedagogique_prof') });
 app.get('/map', (req, res) => { res.render('map') });
