@@ -20,6 +20,14 @@ db.run(`CREATE TABLE IF NOT EXISTS users (
   role TEXT
 )`);
 
+db.run(`CREATE TABLE IF NOT EXISTS offres (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  nbHeures INTEGER,
+  startDate TEXT,
+  endDate TEXT,
+  ville Text
+)`);
+
 
 // Routes
 app.get('/home', (req, res) => res.render('home', { message: null }));
@@ -47,6 +55,16 @@ app.post('/register', async (req, res) => {
     }
     res.render('home', { message: 'Compte créé avec succès !' });
   });
+});
+
+app.post('/publier',(req,res) => {
+  const { nbHeures, startDate, endDate, ville} = req.body;
+  db.run(`INSERT INTO offres(nbHeures, startDate, endDate, ville) VALUES (?,?,?,?)`, [nbHeures,startDate,endDate,ville], err => {
+    if (err) {
+      return res.send("Erreur lors de l'ajout de l'offre : " + err.message);
+    }
+    res.render('publier');
+  })
 });
 
 

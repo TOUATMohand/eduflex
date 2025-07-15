@@ -85,22 +85,22 @@
       <button class="close-btn float-end" id="closeFormButton"
         style="border: none; background: none; font-size: 20px;">&times;</button>
       <h4>Créer une Offre</h4>
-      <form>
+      <form action="/publier" method="POST">
         <div class="form-group">
           <label for="nbHeures">Nombre d'heures</label>
-          <input type="number" id="nbHeures" class="form-control" placeholder="Ex: 10">
+          <input type="number" name="nbHeures" class="form-control" placeholder="Ex: 10">
         </div>
         <div class="form-group">
           <label for="startDate">Date de début</label>
-          <input type="date" id="startDate" class="form-control">
+          <input type="date" name="startDate" class="form-control">
         </div>
         <div class="form-group">
           <label for="endDate">Date de fin</label>
-          <input type="date" id="endDate" class="form-control">
+          <input type="date" name="endDate" class="form-control">
         </div>
         <div class="form-group">
           <label for="ville">Ville</label>
-          <input type="text" id="ville" class="form-control" placeholder="Ex: Paris">
+          <input type="text" name="ville" class="form-control" placeholder="Ex: Paris">
         </div>
         <button type="submit" class="btn btn-primary mt-3" style="background-color: #023164; color: white;">
           Soumettre l'offre
