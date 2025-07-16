@@ -31,7 +31,7 @@ db.run(`CREATE TABLE IF NOT EXISTS offres (
 
 // Routes
 app.get('/home', (req, res) => res.render('home', { message: null }));
-app.get('/', (req, res) => res.render('index'));
+app.get('/', (req, res) => res.render('home'));
 app.get('/register', (req, res) => res.render('register'));
 app.get('/login', (req, res) => res.render('login'));
 app.get('/offres', (req, res) => { res.render('offres') });
@@ -60,9 +60,9 @@ app.post('/register', async (req, res) => {
   });
 });
 
-app.post('/publier',(req,res) => {
-  const { nbHeures, startDate, endDate, ville} = req.body;
-  db.run(`INSERT INTO offres(nbHeures, startDate, endDate, ville) VALUES (?,?,?,?)`, [nbHeures,startDate,endDate,ville], err => {
+app.post('/publier', (req, res) => {
+  const { nbHeures, startDate, endDate, ville } = req.body;
+  db.run(`INSERT INTO offres(nbHeures, startDate, endDate, ville) VALUES (?,?,?,?)`, [nbHeures, startDate, endDate, ville], err => {
     if (err) {
       return res.send("Erreur lors de l'ajout de l'offre : " + err.message);
     }
