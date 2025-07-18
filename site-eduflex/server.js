@@ -40,13 +40,34 @@ db.run(`CREATE TABLE IF NOT EXISTS offres (
   professeurID INTEGER
 )`);
 
+function ensureAuthenticatedEtablissement(req, res, next) {
+  if (req.session && req.session.userId && req.session.role == "etablissement") {
+    return next(); // OK → utilisateur connecté
+  } else {
+    return res.redirect('/connexion'); // Refusé → redirection
+  }
+}
+
+function ensureAuthenticatedProf(req, res, next) {
+  if (req.session && req.session.userId && req.session.role == "professeur") {
+    return next(); // OK → utilisateur connecté
+  } else {
+    return res.redirect('/connexion'); // Refusé → redirection
+  }
+}
 
 // Routes
-app.get('/home', (req, res) => res.render('home', { message: null }));
+app.get('/home', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.log(err);
+      return res.send('Erreur lors de la suppression de la session');
+    }
+    res.render('home', { message: null });
+  });
+});
 app.get('/', (req, res) => res.render('home'));
-app.get('/register', (req, res) => res.render('register'));
-app.get('/login', (req, res) => res.render('login'));
-app.get('/offres', (req, res) => {
+app.get('/offres',ensureAuthenticatedProf, (req, res) => {
   db.all('SELECT * FROM offres WHERE professeurID IS NULL', [], (err,rows) => {
     if (err) {
       console.log(err);
@@ -58,7 +79,7 @@ app.get('/offres', (req, res) => {
 app.get('/connexion', (req, res) => {
   res.render('connexion', { message: null });
 });
-app.get('/espace_etablissement', (req, res) => {
+app.get('/espace_etablissement',ensureAuthenticatedEtablissement, (req, res) => {
   db.all('SELECT * FROM offres WHERE etablissementID = ?', [req.session.userId], (err,rows) => {
     if (err) {
       console.log(err);
@@ -67,7 +88,7 @@ app.get('/espace_etablissement', (req, res) => {
     res.render('espace_etablissement', {offres : rows}); 
   })
 });
-app.get('/espace_professeur', (req, res) => { 
+app.get('/espace_professeur',ensureAuthenticatedProf, (req, res) => { 
   db.all('SELECT * FROM offres WHERE professeurID = ?', [req.session.userId], (err,rows) => {
     if (err) {
       console.log(err);
@@ -76,12 +97,11 @@ app.get('/espace_professeur', (req, res) => {
     res.render('espace_professeur', {offres : rows}); 
   })
 });  
-app.get('/espace_pedagogique', (req, res) => { res.render('espace_pedagogique') });
-app.get('/espace_pedagogique_prof', (req, res) => { res.render('espace_pedagogique_prof') });
-app.get('/map', (req, res) => { res.render('map') });
-app.get('/visio', (req, res) => { res.render('visio') });
-app.get('/visioprof', (req, res) => { res.render('visioprof') });
-app.get('/publier', (req, res) => { res.render('publier') });
+app.get('/espace_pedagogique',ensureAuthenticatedEtablissement, (req, res) => { res.render('espace_pedagogique') });
+app.get('/espace_pedagogique_prof',ensureAuthenticatedProf, (req, res) => { res.render('espace_pedagogique_prof') });
+app.get('/visio', ensureAuthenticatedEtablissement,(req, res) => { res.render('visio') });
+app.get('/visioprof',ensureAuthenticatedProf, (req, res) => { res.render('visioprof') });
+app.get('/publier',ensureAuthenticatedEtablissement, (req, res) => { res.render('publier') });
 
 
 app.post('/register', async (req, res) => {
