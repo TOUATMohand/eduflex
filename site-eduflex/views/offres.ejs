@@ -207,7 +207,7 @@
           <p><strong>Date de début :</strong> <%= offer.startDate %></p>
           <p><strong>Date de fin :</strong> <%= offer.endDate %></p>
           <p><strong>Ville :</strong> <%= offer.ville %></p>
-          <button class="accept-btn">Accepter</button>
+          <button class="accept-btn" data-id = "<%=offer.id %>">Accepter</button>
         </div>
       <% }) %>
     </div>
@@ -267,9 +267,27 @@
   <script>
     document.querySelectorAll('.accept-btn').forEach(button => {
       button.addEventListener('click', function () {
-        this.textContent = 'Accepté';
-        this.classList.add('accepted'); // Optionnel : ajouter une classe pour modifier le style si souhaité
-        this.disabled = true; // Désactive le bouton après acceptation
+        const offreID = this.dataset.id;
+        fetch('/offres/accept', {
+          method : 'POST',
+          headers: {
+            'Content-Type' : 'application/json'
+          },
+          body: JSON.stringify({ id: offreID})
+        })
+        .then(response => {
+          if (response.ok) {
+            this.textContent = 'Accepté';
+            this.classList.add('accepted'); // Optionnel : ajouter une classe pour modifier le style si souhaité
+            this.disabled = true; // Désactive le bouton après acceptation
+          } else {
+            alert('Erreur lors de la mise à jour');
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          alert('Erreur réseau');
+        });        
       });
     });
   </script>

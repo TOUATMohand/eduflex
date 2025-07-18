@@ -47,7 +47,7 @@ app.get('/', (req, res) => res.render('home'));
 app.get('/register', (req, res) => res.render('register'));
 app.get('/login', (req, res) => res.render('login'));
 app.get('/offres', (req, res) => {
-  db.all('SELECT * FROM offres', [], (err,rows) => {
+  db.all('SELECT * FROM offres WHERE professeurID IS NULL', [], (err,rows) => {
     if (err) {
       console.log(err);
       return res.send("Erreur lors de la récupération des offres");
@@ -58,8 +58,24 @@ app.get('/offres', (req, res) => {
 app.get('/connexion', (req, res) => {
   res.render('connexion', { message: null });
 });
-app.get('/espace_etablissement', (req, res) => { res.render('espace_etablissement') });
-app.get('/espace_professeur', (req, res) => { res.render('espace_professeur') });
+app.get('/espace_etablissement', (req, res) => {
+  db.all('SELECT * FROM offres WHERE etablissementID = ?', [req.session.userId], (err,rows) => {
+    if (err) {
+      console.log(err);
+      return res.send("Erreur lors de la récupération des offres émises");
+    }
+    res.render('espace_etablissement', {offres : rows}); 
+  })
+});
+app.get('/espace_professeur', (req, res) => { 
+  db.all('SELECT * FROM offres WHERE professeurID = ?', [req.session.userId], (err,rows) => {
+    if (err) {
+      console.log(err);
+      return res.send("Erreur lors de la récupération des offres acceptées");
+    }
+    res.render('espace_professeur', {offres : rows}); 
+  })
+});  
 app.get('/espace_pedagogique', (req, res) => { res.render('espace_pedagogique') });
 app.get('/espace_pedagogique_prof', (req, res) => { res.render('espace_pedagogique_prof') });
 app.get('/map', (req, res) => { res.render('map') });
@@ -77,6 +93,27 @@ app.post('/register', async (req, res) => {
       return res.send("Erreur lors de l'inscription : " + err.message);
     }
     res.render('home', { message: 'Compte créé avec succès !' });
+  });
+});
+
+app.post('/login', (req, res) => {
+  const { email, password, role } = req.body;
+
+  db.get(`SELECT * FROM users WHERE email = ?`, [email], async (err, user) => {
+    if (!user) return res.send("Utilisateur non trouvé");
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) return res.send("Mot de passe incorrect");
+
+    if (user.role !== role) return res.send("Rôle incorrect");
+    req.session.userId = user.id;
+    req.session.role = user.role;
+
+    // Redirection selon le rôle
+    if (user.role === 'professeur') {
+      return res.redirect('/espace_pedagogique_prof');
+    } else {
+      return res.redirect('/espace_etablissement');
+    }
   });
 });
 
@@ -102,27 +139,19 @@ app.post('/publier', (req, res) => {
   
 });
 
+app.post('/offres/accept', express.json(), (req, res) => {
+  const id = req.body.id;
+  if (!id) return res.status(400).send('ID manquant');
 
-app.post('/login', (req, res) => {
-  const { email, password, role } = req.body;
-
-  db.get(`SELECT * FROM users WHERE email = ?`, [email], async (err, user) => {
-    if (!user) return res.send("Utilisateur non trouvé");
-    const valid = await bcrypt.compare(password, user.password);
-    if (!valid) return res.send("Mot de passe incorrect");
-
-    if (user.role !== role) return res.send("Rôle incorrect");
-    req.session.userId = user.id;
-    req.session.role = user.role;
-
-    // Redirection selon le rôle
-    if (user.role === 'professeur') {
-      return res.redirect('/espace_pedagogique_prof');
-    } else {
-      return res.redirect('/espace_etablissement');
+  db.run('UPDATE offres SET professeurID = ? WHERE id = ?', [req.session.userId,id], function(err) {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Erreur base de données');
     }
+    res.status(200).send('Offre acceptée');
   });
 });
+
 
 
 app.listen(3000, () => {

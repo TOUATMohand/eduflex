@@ -166,17 +166,13 @@
     <h1 class="title">Missions en cours</h1>
 
     <!-- Missions en cours -->
-    <div class="mission-box">
-      <p><strong>Nombre d'heures :</strong> 20 heures</p>
-      <p><strong>Date de début :</strong> 10/11/2024</p>
-      <p><strong>Date de fin :</strong> 20/11/2024</p>
-    </div>
-
-    <div class="mission-box">
-      <p><strong>Nombre d'heures :</strong> 15 heures</p>
-      <p><strong>Date de début :</strong> 15/11/2024</p>
-      <p><strong>Date de fin :</strong> 25/11/2024</p>
-    </div>
+    <% offres.forEach(offer => { %>
+        <div class="mission-box">
+          <p><strong>Nombre d'heures :</strong> <%= offer.nbHeures %> heures</p>
+          <p><strong>Date de début :</strong> <%= offer.startDate %></p>
+          <p><strong>Date de fin :</strong> <%= offer.endDate %></p>
+        </div>
+      <% }) %>
 
     <!-- Historique des missions -->
     <div class="accordion" id="historiqueMissions">
