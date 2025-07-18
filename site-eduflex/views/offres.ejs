@@ -6,193 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Liste des Offres d'Enseignement</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    /* Style global */
-    body,
-    html {
-      margin: 0;
-      padding: 0;
-      font-family: Verdana, Geneva, sans-serif;
-
-      height: 100%;
-    }
-
-    /* Barre de navigation */
-    .navbar {
-      background-color: #0056b3;
-      color: white;
-
-    }
-
-    .navbar .nav-link,
-    .navbar .navbar-brand {
-      color: black !important;
-      font-family: "Times New Roman", Times, serif;
-    }
-
-    /* Conteneurs principaux */
-    .content {
-      display: flex;
-      height: calc(100vh - 56px);
-      /* Ajuste pour que la hauteur totale inclue la navbar */
-    }
-
-    /* Section des offres */
-    .offers {
-      width: 50%;
-      padding: 20px;
-      overflow-y: auto;
-      position: relative;
-
-    }
-
-    /* Style de chaque offre */
-    .offer {
-      background-color: white;
-      color: black;
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 15px;
-      position: relative;
-    }
-
-    .offer h3 {
-      margin: 0;
-      font-size: 1.2em;
-    }
-
-    /* Section de la carte */
-    #map {
-      width: 50%;
-      height: 100%;
-    }
-
-    .heading-with-background {
-      background-color: white;
-      /* Fond blanc */
-      color: black;
-      /* Texte noir */
-      padding: 10px 20px;
-      /* Espacement interne pour plus de lisibilité */
-      border: 2px solid white;
-      /* Bordure blanche */
-      border-radius: 8px;
-      /* Bordures arrondies */
-      display: inline-block;
-      /* Limite le cadre autour du texte */
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-      /* Ombre subtile pour donner du relief */
-    }
-
-
-
-
-
-    /* Style du bouton Accepter */
-    .accept-btn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      color: #ffffff;
-      background-color: #0056b3;
-      border: 1px solid black;
-      border-radius: 4px;
-      padding: 5px 15px;
-      cursor: pointer;
-      font-size: 0.9em;
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    .accept-btn:hover {
-      background-color: #2a71bd;
-      color: #ffffff;
-    }
-
-    .background-blur {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-image: url('image.webp');
-      /* Chemin de l'image */
-      height: 250vh;
-
-      background-position: center;
-      filter: blur(8px);
-      /* Flou de 8 pixels */
-      z-index: -1;
-      /* Assure que l'image reste en arrière-plan */
-
-      pointer-events: none;
-      /* Permet de cliquer à travers l'image de fond */
-
-
-    }
-
-
-    /* Navbar uniforme */
-    .navbar {
-      background-color: #f8f9fa !important;
-      /* Couleur claire comme dans Bootstrap bg-light */
-      border-bottom: 1px solid #ddd;
-    }
-
-    .navbar .navbar-brand,
-    .navbar .nav-link {
-      color: black !important;
-      font-family: "Times New Roman", Times, serif;
-      font-size: 1rem;
-    }
-
-    .navbar .nav-link:hover,
-    .navbar .navbar-brand:hover {
-      color: #0056b3 !important;
-    }
-
-    .navbar-toggler {
-      border-color: rgba(0, 0, 0, 0.1);
-    }
-
-    .navbar-toggler-icon {
-      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.5%29' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-    }
-  </style>
+  <link rel="stylesheet" href="/css/offres.css">
 </head>
 
 <body>
 
-  <!-- Barre de navigation en haut -->
-  <!-- Barre de navigation avec icône de connexion -->
-  <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/espace_professeur">Accueil</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/offres">Consulter les Offres</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/visioprof">Visio</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/espace_pedagogique_prof">Espace Pédagogique</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="/home">
-              <button class="btn btn-light" id="loginButton">Se déconnecter</button>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <%- include('partials/navbar-prof') %>
 
 
   <!-- Contenu principal : offres et carte -->
@@ -262,7 +81,7 @@
   </script>
   <script async defer
     src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDgOz2GSk6BRSl8UQWGqnLUNSiEkZoBJZ8&callback=initMap'>
-    </script>
+  </script>
 
   <script>
     document.querySelectorAll('.accept-btn').forEach(button => {
@@ -291,8 +110,6 @@
       });
     });
   </script>
-
-
 </body>
 
 </html>
