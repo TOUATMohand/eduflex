@@ -5,11 +5,19 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
 const app = express();
+const session = require('express-session');
 const db = new sqlite3.Database('./db.sqlite');
+
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: 'secret', // change cette chaîne en production
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false } // mettre true uniquement si HTTPS
+}));
 app.set('view engine', 'ejs');
 
 // Création de la table users
@@ -25,7 +33,11 @@ db.run(`CREATE TABLE IF NOT EXISTS offres (
   nbHeures INTEGER,
   startDate TEXT,
   endDate TEXT,
-  ville Text
+  ville TEXT,
+  latitude REAL,
+  longitude REAL,
+  etablissementID INTEGER,
+  professeurID INTEGER
 )`);
 
 
@@ -34,7 +46,15 @@ app.get('/home', (req, res) => res.render('home', { message: null }));
 app.get('/', (req, res) => res.render('home'));
 app.get('/register', (req, res) => res.render('register'));
 app.get('/login', (req, res) => res.render('login'));
-app.get('/offres', (req, res) => { res.render('offres') });
+app.get('/offres', (req, res) => {
+  db.all('SELECT * FROM offres', [], (err,rows) => {
+    if (err) {
+      console.log(err);
+      return res.send("Erreur lors de la récupération des offres");
+    }
+    res.render('offres', {offres: rows}); 
+  }); 
+});
 app.get('/connexion', (req, res) => {
   res.render('connexion', { message: null });
 });
@@ -62,12 +82,24 @@ app.post('/register', async (req, res) => {
 
 app.post('/publier', (req, res) => {
   const { nbHeures, startDate, endDate, ville } = req.body;
-  db.run(`INSERT INTO offres(nbHeures, startDate, endDate, ville) VALUES (?,?,?,?)`, [nbHeures, startDate, endDate, ville], err => {
-    if (err) {
-      return res.send("Erreur lors de l'ajout de l'offre : " + err.message);
+  db.get(`SELECT latitude, longitude FROM cities WHERE city = ?`,[ville], (err,row) =>{
+    if (err){
+      return res.send("Erreur lors de la recherche de la ville : " + err.message);
     }
-    res.render('publier');
-  })
+
+    if (!row){
+      return res.send("Ville inconnue");
+    }
+
+    const { latitude, longitude } = row;
+    db.run(`INSERT INTO offres(nbHeures, startDate, endDate, ville, latitude, longitude, etablissementID, professeurID) VALUES (?,?,?,?,?,?,?,?)`, [nbHeures, startDate, endDate, ville, latitude, longitude, req.session.userId, null], err => {
+      if (err) {
+        return res.send("Erreur lors de l'ajout de l'offre : " + err.message);
+      }
+      res.render('publier');
+    });
+  });
+  
 });
 
 
@@ -80,6 +112,8 @@ app.post('/login', (req, res) => {
     if (!valid) return res.send("Mot de passe incorrect");
 
     if (user.role !== role) return res.send("Rôle incorrect");
+    req.session.userId = user.id;
+    req.session.role = user.role;
 
     // Redirection selon le rôle
     if (user.role === 'professeur') {

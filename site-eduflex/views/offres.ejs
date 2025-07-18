@@ -200,67 +200,16 @@
     <!-- Section des offres d'enseignement -->
     <div class="offers">
       <div class="background-blur"></div> <!-- Élément de fond séparé -->
-
-
-
-      <div class="offer">
-        <h3>Mission à Montpellier</h3>
-        <p><strong>Nombre d'heures :</strong> 20 heures</p>
-        <p><strong>Date de début :</strong> 10/11/2024</p>
-        <p><strong>Date de fin :</strong> 20/11/2024</p>
-        <p><strong>Ville :</strong> Montpellier</p>
-        <button class="accept-btn">Accepter</button>
-      </div>
-      <div class="offer">
-        <h3>Mission à Lyon</h3>
-        <p><strong>Nombre d'heures :</strong> 15 heures</p>
-        <p><strong>Date de début :</strong> 15/11/2024</p>
-        <p><strong>Date de fin :</strong> 25/11/2024</p>
-        <p><strong>Ville :</strong> Lyon</p>
-        <button class="accept-btn">Accepter</button>
-      </div>
-      <div class="offer">
-        <h3>Mission à Marseille</h3>
-        <p><strong>Nombre d'heures :</strong> 3 heures</p>
-        <p><strong>Date de début :</strong> 02/12/2024</p>
-        <p><strong>Date de fin :</strong> 06/12/2024</p>
-        <p><strong>Ville :</strong> Marseille</p>
-        <button class="accept-btn">Accepter</button>
-      </div>
-      <div class="offer">
-        <h3>Mission à Bordeaux</h3>
-        <p><strong>Nombre d'heures :</strong> 50 heures</p>
-        <p><strong>Date de début :</strong> 01/04/2025</p>
-        <p><strong>Date de fin :</strong> 07/05/2025</p>
-        <p><strong>Ville :</strong> Bordeaux</p>
-        <button class="accept-btn">Accepter</button>
-      </div>
-
-      <div class="offer">
-        <h3>Mission à Lille</h3>
-        <p><strong>Nombre d'heures :</strong> 13 heures</p>
-        <p><strong>Date de début :</strong> 11/08/2025</p>
-        <p><strong>Date de fin :</strong> 18/08/2025</p>
-        <p><strong>Ville :</strong> Lille</p>
-        <button class="accept-btn">Accepter</button>
-      </div>
-      <div class="offer">
-        <h3>Mission à Nice</h3>
-        <p><strong>Nombre d'heures :</strong> 30 heures</p>
-        <p><strong>Date de début :</strong> 5/02/2025</p>
-        <p><strong>Date de fin :</strong> 18/02/2025</p>
-        <p><strong>Ville :</strong> Nice</p>
-        <button class="accept-btn">Accepter</button>
-      </div>
-      <div class="offer">
-        <h3>Mission à Toulouse</h3>
-        <p><strong>Nombre d'heures :</strong> 2 heures</p>
-        <p><strong>Date de début :</strong> 28/05/2025</p>
-        <p><strong>Date de fin :</strong> 29/05/2025</p>
-        <p><strong>Ville :</strong> Toulouse</p>
-        <button class="accept-btn">Accepter</button>
-      </div>
-      <!-- Ajoutez 8 autres offres similaires ici -->
+      <% offres.forEach(offer => { %>
+        <div class="offer">
+          <h3>Mission à <%= offer.ville %></h3>
+          <p><strong>Nombre d'heures :</strong> <%= offer.nbHeures %> heures</p>
+          <p><strong>Date de début :</strong> <%= offer.startDate %></p>
+          <p><strong>Date de fin :</strong> <%= offer.endDate %></p>
+          <p><strong>Ville :</strong> <%= offer.ville %></p>
+          <button class="accept-btn">Accepter</button>
+        </div>
+      <% }) %>
     </div>
 
     <!-- Section de la carte Google Maps -->
@@ -269,16 +218,7 @@
 
   <!-- Intégration de Google Maps -->
   <script>
-    const offers = [
-      { title: "Mission à Lyon", lat: 45.7640, lng: 4.8357 },
-      { title: "Mission à Marseille", lat: 43.2965, lng: 5.3698 },
-      { title: "Mission à Bordeaux", lat: 44.8378, lng: -0.5792 },
-      { title: "Mission à Lille", lat: 50.6292, lng: 3.0573 },
-      { title: "Mission à Toulouse", lat: 43.6047, lng: 1.4442 },
-      { title: "Mission à Nice", lat: 43.7102, lng: 7.2620 },
-      { title: "Mission à Montpellier", lat: 43.6119, lng: 3.8772 }
-    ];
-
+    const offres = <%- JSON.stringify(offres) %>;
     function initMap() {
       const franceCenter = { lat: 46.603354, lng: 1.888334 };
       const map = new google.maps.Map(document.getElementById("map"), {
@@ -311,11 +251,11 @@
         alert("Géolocalisation non supportée par le navigateur.");
       }
 
-      offers.forEach((offer) => {
+      offres.forEach((offre) => {
         new google.maps.Marker({
-          position: { lat: offer.lat, lng: offer.lng },
+          position: { lat: offre.latitude, lng: offre.longitude },
           map: map,
-          title: offer.title
+          title: offre.ville,
         });
       });
     }
